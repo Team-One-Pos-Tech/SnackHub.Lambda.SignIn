@@ -8,11 +8,11 @@ Globals:
     Timeout: 10
     MemorySize: 128
 Resources:
-  HelloWorldFunction:
+  SignInFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: HelloWorldFunction
-      Handler: HelloWorld::HelloWorld.Function::FunctionHandler
+      CodeUri: SignInFunction
+      Handler: SignIn::SignIn.Function::FunctionHandler
       Runtime: dotnet6
       Architectures:
       - x86_64
@@ -21,27 +21,21 @@ Resources:
         Variables:
           PARAM1: VALUE
       Events:
-        HelloWorld:
+        SignIn:
           Type: Api
           Properties:
             Path: /signIn
             Method: post
     Metadata:
-      SamResourceId: HelloWorldFunction
+      SamResourceId: SignInFunction
 Outputs:
-  HelloWorldApi:
+  SignInApi:
     Description: API Gateway endpoint URL for Prod stage for Hello World function
     Value:
       Fn::Sub: https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/hello/
-  HelloWorldFunction:
-    Description: Hello World Lambda Function ARN
+  SignInFunction:
+    Description: Hello World SignIn Lambda Function ARN
     Value:
       Fn::GetAtt:
-      - HelloWorldFunction
-      - Arn
-  HelloWorldFunctionIamRole:
-    Description: Implicit IAM Role created for Hello World function
-    Value:
-      Fn::GetAtt:
-      - HelloWorldFunctionRole
+      - SignIn
       - Arn
