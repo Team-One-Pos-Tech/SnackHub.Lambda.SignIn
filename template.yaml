@@ -10,11 +10,11 @@ Globals:
     MemorySize: 128
 
 Resources:
-  HelloWorldFunction:
+  SignInFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
-      CodeUri: ./src/HelloWorld/
-      Handler: HelloWorld::HelloWorld.Function::FunctionHandler
+      CodeUri: ./src/SignIn/
+      Handler: SignIn::SignIn.Function::FunctionHandler
       Runtime: dotnet6
       Architectures:
         - x86_64
@@ -23,7 +23,7 @@ Resources:
         Variables:
           PARAM1: VALUE
       Events:
-        HelloWorld:
+        SignIn:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
             Path: /signIn
@@ -33,12 +33,9 @@ Outputs:
   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
   # Find out more about other implicit resources you can reference within SAM
   # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
-  HelloWorldApi:
+  SignInApi:
     Description: "API Gateway endpoint URL for Prod stage for Hello World function"
     Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/hello/"
-  HelloWorldFunction:
-    Description: "Hello World Lambda Function ARN"
-    Value: !GetAtt HelloWorldFunction.Arn
-  HelloWorldFunctionIamRole:
-    Description: "Implicit IAM Role created for Hello World function"
-    Value: !GetAtt HelloWorldFunctionRole.Arn
+  SignInFunction:
+    Description: "Hello World SignIn Lambda Function ARN"
+    Value: !GetAtt SignIn.Arn
