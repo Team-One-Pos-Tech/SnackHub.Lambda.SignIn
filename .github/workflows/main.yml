@@ -17,6 +17,12 @@ jobs:
       with:
         use-installer: true
         token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Dump AWS_ACCESS_KEY_ID
+      run: echo ${{ secrets.AWS_ACCESS_KEY_ID }}
+
+    - name: Dump AWS_SECRET_ACCESS_KEY
+      run: echo ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         
     - name: Authenticate on AWS
       uses: aws-actions/configure-aws-credentials@v2
