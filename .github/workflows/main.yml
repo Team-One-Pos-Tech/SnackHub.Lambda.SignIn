@@ -28,5 +28,5 @@ jobs:
         aws-region: us-east-1
 
     - name: Build Function
-      run: sam build --use-container
+      run: sam build
    
