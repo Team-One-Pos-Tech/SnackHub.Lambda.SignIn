@@ -13,6 +13,11 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
+    - name: SonarCloud Scan
+      uses: SonarSource/sonarcloud-github-action@v3.0.0
+      env:
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
     - name: Setup AWS SAM CLI
       uses: aws-actions/setup-sam@v2
       with:
@@ -29,4 +34,4 @@ jobs:
 
     - name: Build Function
       run: sam build
-   
+
