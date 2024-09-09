@@ -18,17 +18,11 @@ jobs:
         use-installer: true
         token: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Dump AWS_ACCESS_KEY_ID
-      run: echo ${{ secrets.AWS_ACCESS_KEY_ID }}
-
-    - name: Dump AWS_SECRET_ACCESS_KEY
-      run: echo ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        
     - name: Authenticate on AWS
       uses: aws-actions/configure-aws-credentials@v2
       with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-access-key-id: ASIA6LGBAVWTOKZPSJUI
+        aws-secret-access-key: e50li8Wj6u5RYOB+D/buHmFUn7+YBIkR3bg3mZhs
         aws-region: us-east-1
 
     - name: Build Function
