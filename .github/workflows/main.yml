@@ -25,6 +25,7 @@ jobs:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: us-east-1
+        aws_session_token: IQoJb3JpZ2luX2VjEDsaCXVzLXdlc3QtMiJHMEUCIF6Z+LPZkdymFyUL4Zjo/pP8eES7wcqWNtb9j5KopsiaAiEAynEmG1+tHdREnR8bF09cRVWgGCMiHorYZQ1Wu6N2ZQMqrwIIZBAAGgw5ODYwOTk3ODkyMjIiDAUqv9/yldw6NTQ/ECqMAvCizfQZguVarmQkNqA7Lrsgl1mZAun657eWZuxtRcFRTE7S37YrpeS2gMZnV+YkKtrz2jd8ieZCBMZmvw704rszZ63DrEt9Rg9j/XxjFqWR+s0Sb5ugrE3eswmIWxsbyEIxICaXVMqkqYrMUpIL5p+jVncsfbVDCNVZsy6Urcxpq+WlaKOlUgfsAci/vY6poGgvbI0OMt+aa5BEYTdV/8musCkGxFCvCp7/FH1gi1tn2py3eQALKo0FGW60GFPwa50TMn4fQgs7HSenyNllkEfLt4I6jEFXG+Z/40rABw1XMu5FAceiD7TengnINS9ccOmb0EA0STiPHyfTWLkEWxe6jIphruTXo3gj3Yswpf78tgY6nQEcnbBJ/MR425SciDcxrwOmQup2Uifb45X6nwIAq3JoEmclEnJzhQ7qS72bWK06hHFUJZvIgmOnsDjMgew8nlFkXm9nPdDOrEzLcNZO60H9rzseKCTObx1xETk2WZPEco3IHUaUqv6tSVNP9dPIZZ0xHKDgSqkeoOKpv/V52TYZM52J8AgimcxUnf5P2EiblesGZZLuqtXUp0B140xF
 
     - name: Build Function
       run: sam build --use-container
