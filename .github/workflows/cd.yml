@@ -6,7 +6,7 @@ on:
 
 jobs:
 
-  build:
+  deploy:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
@@ -28,11 +28,5 @@ jobs:
     - name: Build Function
       run: sam build
 
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v3
-    
     - name: Deploy Function
       run: sam deploy --no-confirm-changeset --no-fail-on-empty-changeset
