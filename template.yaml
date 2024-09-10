@@ -19,6 +19,7 @@ Resources:
       Architectures:
         - x86_64
       MemorySize: 256
+      Role: arn:aws:iam::986099789222:role/LabRole
       Environment: # More info about Env Vars: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#environment-object
         Variables:
           PARAM1: VALUE
@@ -38,4 +39,4 @@ Outputs:
     Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/hello/"
   SignInFunction:
     Description: "Hello World SignIn Lambda Function ARN"
-    Value: !GetAtt SignIn.Arn
+    Value: !GetAtt SignInFunction.Arn

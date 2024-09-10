@@ -17,6 +17,7 @@ Resources:
       Architectures:
       - x86_64
       MemorySize: 256
+      Role: arn:aws:iam::986099789222:role/LabRole
       Environment:
         Variables:
           PARAM1: VALUE
@@ -37,5 +38,5 @@ Outputs:
     Description: Hello World SignIn Lambda Function ARN
     Value:
       Fn::GetAtt:
-      - SignIn
+      - SignInFunction
       - Arn
