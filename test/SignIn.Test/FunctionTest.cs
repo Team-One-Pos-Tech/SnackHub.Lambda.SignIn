@@ -1,3 +1,4 @@
+using System.Net;
 using Moq;
 using System.Threading.Tasks;
 using System.Net.Http;
@@ -13,13 +14,11 @@ namespace SignIn.Tests
 {
   public class FunctionTest
   {
-    private static readonly HttpClient client = new HttpClient();
-    
-    private Mock<IAuthenticateRepository> _authRepository;
+    private Mock<ISignInRepository> _authRepository;
 
     private void BeforeTestStarting()
     {
-      _authRepository = new Mock<IAuthenticateRepository>();
+      _authRepository = new Mock<ISignInRepository>();
     }
     
     [Fact]
@@ -27,7 +26,6 @@ namespace SignIn.Tests
     {
       // Arrange
       BeforeTestStarting();
-      
       
       var request = new APIGatewayProxyRequest();
       var context = new TestLambdaContext();
@@ -43,13 +41,7 @@ namespace SignIn.Tests
 
       _authRepository.Setup(repository => repository.Authenticate(cpf, password))
         .Returns(
-          new AdminInitiateAuthResponse()
-          {
-            AuthenticationResult = new AuthenticationResultType()
-            {
-              IdToken = "eyJraWQiOiJrZXktdjEiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiI0ZzlpOXFpZ2NtN21xODJzMnI3djkzOWF1ZSIsImF1ZCI6IkRiNmtyZm9lZG5k"
-            }
-          }
+          new SingInResponse("eyJraWQiOiJrZXktdjEiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiI0ZzlpOXFpZ2NtN21xODJzMnI3djkzOWF1ZSIsImF1ZCI6IkRiNmtyZm9lZG5k", true)
         );
             
       var function = new Function(_authRepository.Object);
@@ -60,8 +52,8 @@ namespace SignIn.Tests
       // Assert
       response.StatusCode.Should().Be(200);
       
-      var authResponse = JsonSerializer.Deserialize<AdminInitiateAuthResponse>(response.Body);
-      authResponse.AuthenticationResult.IdToken.Should().NotBe(null);
+      var authResponse = JsonSerializer.Deserialize<SingInResponse>(response.Body);
+      authResponse.IdToken.Should().NotBe(null);
       
       _authRepository.Verify(x => x.Authenticate(cpf, password), Times.Once);
 

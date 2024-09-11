@@ -23,11 +23,11 @@ namespace SignIn
         
         private static readonly AmazonCognitoIdentityProviderClient cognitoClient = new AmazonCognitoIdentityProviderClient();
         
-        private readonly IAuthenticateRepository _authRepository;
+        private readonly ISignInRepository _signInRepository;
 
-        public Function(IAuthenticateRepository authRepository)
+        public Function(ISignInRepository signInRepository)
         {
-            _authRepository = authRepository;
+            _signInRepository = signInRepository;
         }
 
         public async Task<APIGatewayProxyResponse> FunctionHandler(APIGatewayProxyRequest apigProxyEvent, ILambdaContext context)
@@ -36,7 +36,7 @@ namespace SignIn
             var username = requestBody["Username"];
             var password = requestBody["Password"];
 
-            var authResponse = _authRepository.Authenticate(username, password);
+            var authResponse = _signInRepository.Authenticate(username, password);
 
             // var authRequest = new AdminInitiateAuthRequest
             // {
