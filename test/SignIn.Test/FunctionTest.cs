@@ -23,20 +23,36 @@ namespace SignIn.Tests
     }
     
     [Fact]
-    public async Task AuthenticateUseByCpf()
+    public async Task AuthenticateUser()
     {
       // Arrange
+      BeforeTestStarting();
+      
+      
       var request = new APIGatewayProxyRequest();
       var context = new TestLambdaContext();
 
       var cpf = "53469738009";
+      var password = "DefaultPassword!";
       
       request.Body = $@"
         {{
-            ""Cpf"": ""{cpf}"",
+            ""Username"": ""{cpf}"",
+            ""Password"": ""{password}""
         }}";
+
+      _authRepository.Setup(repository => repository.Authenticate(cpf, password))
+        .Returns(
+          new AdminInitiateAuthResponse()
+          {
+            AuthenticationResult = new AuthenticationResultType()
+            {
+              IdToken = "eyJraWQiOiJrZXktdjEiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiI0ZzlpOXFpZ2NtN21xODJzMnI3djkzOWF1ZSIsImF1ZCI6IkRiNmtyZm9lZG5k"
+            }
+          }
+        );
             
-      var function = new Function();
+      var function = new Function(_authRepository.Object);
       
       // Act
       var response = await function.FunctionHandler(request, context);
@@ -47,7 +63,7 @@ namespace SignIn.Tests
       var authResponse = JsonSerializer.Deserialize<AdminInitiateAuthResponse>(response.Body);
       authResponse.AuthenticationResult.IdToken.Should().NotBe(null);
       
-      _authRepository.Verify(x => x.Authenticate(cpf), Times.Once);
+      _authRepository.Verify(x => x.Authenticate(cpf, password), Times.Once);
 
     }
   }
