@@ -30,20 +30,20 @@ namespace SignIn
             var password = requestBody["Password"];
             requestBody.TryGetValue("Email", out var email);
 
-            var authResponse = await _signInRepository.Authenticate(username, password);
+            var signInResponse = await _signInRepository.Authenticate(username, password);
 
-            if (authResponse.Success)
+            if (signInResponse.Success)
             {
-                return CreateResponse(authResponse);
+                return CreateResponse(signInResponse);
             }
             
-            var registerRequest = new SignUpRequest(username, password, email);
+            var signUpRequest = new SignUpRequest(username, password, email);
                 
-            await _singUpRepository.Register(registerRequest);
+            await _singUpRepository.Register(signUpRequest);
                 
-            authResponse = await _signInRepository.Authenticate(username, password);
+            signInResponse = await _signInRepository.Authenticate(username, password);
 
-            return CreateResponse(authResponse);
+            return CreateResponse(signInResponse);
         }
 
         private static APIGatewayProxyResponse CreateResponse(SingInResponse authResponse)
