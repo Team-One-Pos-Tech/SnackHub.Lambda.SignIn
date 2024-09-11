@@ -24,10 +24,13 @@ namespace SignIn
         private static readonly AmazonCognitoIdentityProviderClient cognitoClient = new AmazonCognitoIdentityProviderClient();
         
         private readonly ISignInRepository _signInRepository;
+        
+        private readonly ISignUpRepository _singUpRepository;
 
-        public Function(ISignInRepository signInRepository)
+        public Function(ISignInRepository signInRepository, ISignUpRepository singUpRepository)
         {
             _signInRepository = signInRepository;
+            _singUpRepository = singUpRepository;
         }
 
         public async Task<APIGatewayProxyResponse> FunctionHandler(APIGatewayProxyRequest apigProxyEvent, ILambdaContext context)
@@ -35,8 +38,23 @@ namespace SignIn
             var requestBody = JsonSerializer.Deserialize<Dictionary<string, string>>(apigProxyEvent.Body);
             var username = requestBody["Username"];
             var password = requestBody["Password"];
+            if(!requestBody.TryGetValue("Email", out var email))
+            {
+                email = "";
+            }
 
-            var authResponse = _signInRepository.Authenticate(username, password);
+            var authResponse = await _signInRepository.Authenticate(username, password);
+
+            if (authResponse.Success)
+            {
+                return CreateResponse(authResponse);
+            }
+            
+            var registerRequest = new RegisterRequest(username, password, email);
+                
+            var registerResponse = _singUpRepository.Register(registerRequest);
+                
+            authResponse = await _signInRepository.Authenticate(username, password);
 
             // var authRequest = new AdminInitiateAuthRequest
             // {
@@ -52,6 +70,11 @@ namespace SignIn
             //
             // var authResponse = await cognitoClient.AdminInitiateAuthAsync(authRequest);
 
+            return CreateResponse(authResponse);
+        }
+
+        private static APIGatewayProxyResponse CreateResponse(SingInResponse authResponse)
+        {
             return new APIGatewayProxyResponse
             {
                 Body = JsonSerializer.Serialize(authResponse),
