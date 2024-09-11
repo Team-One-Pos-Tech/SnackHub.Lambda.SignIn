@@ -86,7 +86,7 @@ namespace SignIn.Tests
             ,true)
         );
 
-      _registerRepository.Setup(repository => repository.Register(new RegisterRequest(cpf, password, "email@email.com")))
+      _registerRepository.Setup(repository => repository.Register(new SignUpRequest(cpf, password, "email@email.com")))
         .ReturnsAsync(
           new SingUpResponse(null, true)
         );
@@ -103,7 +103,7 @@ namespace SignIn.Tests
       authResponse.IdToken.Should().NotBe(null);
       
       _authRepository.Verify(x => x.Authenticate(cpf, password), Times.Exactly(2));
-      _registerRepository.Verify(x => x.Register(It.IsAny<RegisterRequest>()), Times.Once());
+      _registerRepository.Verify(x => x.Register(It.IsAny<SignUpRequest>()), Times.Once());
 
     }
   }

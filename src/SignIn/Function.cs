@@ -37,7 +37,7 @@ namespace SignIn
                 return CreateResponse(authResponse);
             }
             
-            var registerRequest = new RegisterRequest(username, password, email);
+            var registerRequest = new SignUpRequest(username, password, email);
                 
             await _singUpRepository.Register(registerRequest);
                 
