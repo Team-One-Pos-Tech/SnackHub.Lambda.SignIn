@@ -59,7 +59,7 @@ namespace SignIn.Tests
     }
     
     [Fact]
-    public async Task RegisterUserIfDoesExists()
+    public async Task RegisterUserIfDoesNotExists()
     {
       // Arrange
       BeforeTestStarting();
