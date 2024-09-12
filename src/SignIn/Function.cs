@@ -1,9 +1,11 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Text.Json;
 using Amazon.Lambda.Core;
 using Amazon.Lambda.APIGatewayEvents;
 using SignIn.Contracts;
+using SignIn.Repositories;
 
 // Assembly attribute to enable the Lambda function's JSON input to be converted into a .NET class.
 [assembly: LambdaSerializer(typeof(Amazon.Lambda.Serialization.SystemTextJson.DefaultLambdaJsonSerializer))]
@@ -16,6 +18,12 @@ namespace SignIn
         private readonly ISignInRepository _signInRepository;
         
         private readonly ISignUpRepository _singUpRepository;
+
+        public Function()
+        {
+            _signInRepository = new CognitoSignInRepository();
+            _singUpRepository = new CognitoSignUpRepository();
+        }
 
         public Function(ISignInRepository signInRepository, ISignUpRepository singUpRepository)
         {
