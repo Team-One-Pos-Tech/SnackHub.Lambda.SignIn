@@ -14,10 +14,13 @@ public class CognitoSignInRepository : ISignInRepository
     
     public async Task<SingInResponse> Authenticate(string username, string password)
     {
+        var userPoolId = Environment.GetEnvironmentVariable("USER_POOL_ID");
+        var clientId = Environment.GetEnvironmentVariable("CLIENT_ID");
+        
         var authRequest = new AdminInitiateAuthRequest()
         {
-            UserPoolId = "us-east-1_DBk6tjf8T", // Replace with your user pool ID
-            ClientId = "4g9i9qigcm7mq82s2r7v939uae", // Replace with your client ID
+            UserPoolId = userPoolId,
+            ClientId = clientId,
             AuthFlow = AuthFlowType.ADMIN_NO_SRP_AUTH,
             AuthParameters = new Dictionary<string, string>
             {
@@ -27,7 +30,7 @@ public class CognitoSignInRepository : ISignInRepository
         };
         
         AdminInitiateAuthResponse authResponse;
-
+        
         try
         {
             authResponse = await _cognitoClient.AdminInitiateAuthAsync(authRequest);
