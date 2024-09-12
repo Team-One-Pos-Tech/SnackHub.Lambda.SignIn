@@ -41,3 +41,12 @@ jobs:
     - name: Build Function
       run: sam build
 
+  unit-tests:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Run Unit Tests
+        run: dotnet test test/signIn.Test
+
