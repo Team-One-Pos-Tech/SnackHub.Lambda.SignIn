@@ -1,12 +1,11 @@
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using System.Net.Http;
 using System.Text.Json;
-using Amazon.CognitoIdentityProvider;
-using Amazon.CognitoIdentityProvider.Model;
 using Amazon.Lambda.Core;
 using Amazon.Lambda.APIGatewayEvents;
+using SignIn.Contracts;
+using SignIn.Repositories;
 
 // Assembly attribute to enable the Lambda function's JSON input to be converted into a .NET class.
 [assembly: LambdaSerializer(typeof(Amazon.Lambda.Serialization.SystemTextJson.DefaultLambdaJsonSerializer))]
@@ -16,32 +15,47 @@ namespace SignIn
 
     public class Function
     {
-        private const string DefaultPassword = "Default-password-99!";
+        private readonly ISignInRepository _signInRepository;
         
-        private static readonly HttpClient client = new HttpClient();
-        
-        private static readonly AmazonCognitoIdentityProviderClient cognitoClient = new AmazonCognitoIdentityProviderClient();
+        private readonly ISignUpRepository _singUpRepository;
+
+        public Function()
+        {
+            _signInRepository = new CognitoSignInRepository();
+            _singUpRepository = new CognitoSignUpRepository();
+        }
+
+        public Function(ISignInRepository signInRepository, ISignUpRepository singUpRepository)
+        {
+            _signInRepository = signInRepository;
+            _singUpRepository = singUpRepository;
+        }
 
         public async Task<APIGatewayProxyResponse> FunctionHandler(APIGatewayProxyRequest apigProxyEvent, ILambdaContext context)
         {
             var requestBody = JsonSerializer.Deserialize<Dictionary<string, string>>(apigProxyEvent.Body);
             var username = requestBody["Username"];
             var password = requestBody["Password"];
+            requestBody.TryGetValue("Email", out var email);
 
-            var authRequest = new AdminInitiateAuthRequest
+            var signInResponse = await _signInRepository.Authenticate(username, password);
+
+            if (signInResponse.Success)
             {
-                UserPoolId = "us-east-1_DBk6tjf8T", // Replace with your user pool ID
-                ClientId = "4g9i9qigcm7mq82s2r7v939uae", // Replace with your client ID
-                AuthFlow = AuthFlowType.ADMIN_NO_SRP_AUTH,
-                AuthParameters = new Dictionary<string, string>
-                {
-                    { "USERNAME", username },
-                    { "PASSWORD", password }
-                }
-            };
+                return CreateResponse(signInResponse);
+            }
             
-            var authResponse = await cognitoClient.AdminInitiateAuthAsync(authRequest);
+            var signUpRequest = new SignUpRequest(username, password, email);
+                
+            await _singUpRepository.Register(signUpRequest);
+                
+            signInResponse = await _signInRepository.Authenticate(username, password);
 
+            return CreateResponse(signInResponse);
+        }
+
+        private static APIGatewayProxyResponse CreateResponse(SingInResponse authResponse)
+        {
             return new APIGatewayProxyResponse
             {
                 Body = JsonSerializer.Serialize(authResponse),
