@@ -18,7 +18,7 @@ jobs:
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
-  build-and-test:
+  build:
     runs-on: ubuntu-latest
     needs: sonar-code-analysis
     steps:
@@ -41,6 +41,14 @@ jobs:
     - name: Build Function
       run: sam build
 
-    - name: Run Unit Tests
-      run: dotnet test test/signIn.Test
+  unit-tests:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Run Unit Tests
+        run: |
+          ls
+          dotnet test ./test/signIn.Test
 
