@@ -7,7 +7,7 @@ using SignIn.Contracts;
 
 namespace SignIn.Repositories;
 
-public class CognitoSignInRepository : ISignInRepository
+public class CognitoSignInService : ISignInService
 {
         
     private readonly AmazonCognitoIdentityProviderClient _cognitoClient = new AmazonCognitoIdentityProviderClient();

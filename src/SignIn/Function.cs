@@ -15,19 +15,19 @@ namespace SignIn
 
     public class Function
     {
-        private readonly ISignInRepository _signInRepository;
+        private readonly ISignInService _signInService;
         
         private readonly ISignUpRepository _singUpRepository;
 
         public Function()
         {
-            _signInRepository = new CognitoSignInRepository();
+            _signInService = new CognitoSignInService();
             _singUpRepository = new CognitoSignUpRepository();
         }
 
-        public Function(ISignInRepository signInRepository, ISignUpRepository singUpRepository)
+        public Function(ISignInService signInService, ISignUpRepository singUpRepository)
         {
-            _signInRepository = signInRepository;
+            _signInService = signInService;
             _singUpRepository = singUpRepository;
         }
 
@@ -38,7 +38,7 @@ namespace SignIn
             var password = requestBody["Password"];
             requestBody.TryGetValue("Email", out var email);
 
-            var signInResponse = await _signInRepository.Authenticate(username, password);
+            var signInResponse = await _signInService.Authenticate(username, password);
 
             if (signInResponse.Success)
             {
@@ -49,7 +49,7 @@ namespace SignIn
                 
             await _singUpRepository.Register(signUpRequest);
                 
-            signInResponse = await _signInRepository.Authenticate(username, password);
+            signInResponse = await _signInService.Authenticate(username, password);
 
             return CreateResponse(signInResponse);
         }

@@ -11,12 +11,12 @@ namespace SignIn.Tests
 {
   public class FunctionTest
   {
-    private Mock<ISignInRepository> _authRepository;
+    private Mock<ISignInService> _authRepository;
     private Mock<ISignUpRepository> _registerRepository;
 
     private void BeforeTestStarting()
     {
-      _authRepository = new Mock<ISignInRepository>();
+      _authRepository = new Mock<ISignInService>();
       _registerRepository = new Mock<ISignUpRepository>();
     }
     
