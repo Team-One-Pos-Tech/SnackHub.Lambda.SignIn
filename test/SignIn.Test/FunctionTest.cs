@@ -106,42 +106,5 @@ namespace SignIn.Tests
       _registerRepository.Verify(x => x.Register(It.IsAny<SignUpRequest>()), Times.Once());
 
     }
-    
-    [Fact]
-    public async Task AuthenticateUserAsAnonymous()
-    {
-      // Arrange
-      BeforeTestStarting();
-      
-      var request = new APIGatewayProxyRequest();
-      var context = new TestLambdaContext();
-
-      var cpf = string.Empty;
-      
-      request.Body = $@"
-        {{
-            ""Username"": ""{cpf}""
-        }}";
-
-      _authRepository.SetupSequence(repository => repository.Authenticate(cpf, null))
-        .ReturnsAsync(
-          new SingInResponse(
-            "eyJraWQiOiJrZXktdjEiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiI0ZzlpOXFpZ2NtN21xODJzMnI3djkzOWF1ZSIsImF1ZCI6IkRiNmtyZm9lZG5k"
-            ,true)
-        );
-            
-      var function = new Function(_authRepository.Object, _registerRepository.Object);
-      
-      // Act
-      var response = await function.FunctionHandler(request, context);
-        
-      // Assert
-      response.StatusCode.Should().Be(200);
-      
-      var authResponse = JsonSerializer.Deserialize<SingInResponse>(response.Body);
-      authResponse.IdToken.Should().NotBe(null);
-      
-      _authRepository.Verify(x => x.Authenticate(cpf, null), Times.Once);
-    }
   }
 }

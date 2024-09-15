@@ -12,11 +12,12 @@ using SignIn.Repositories;
 
 namespace SignIn
 {
+    public record SignUpBodyRequest(string Username, string Password, string Email);
 
     public class Function
     {
         private readonly ISignInService _signInService;
-        
+
         private readonly ISignUpRepository _singUpRepository;
 
         public Function()
@@ -31,25 +32,30 @@ namespace SignIn
             _singUpRepository = singUpRepository;
         }
 
-        public async Task<APIGatewayProxyResponse> FunctionHandler(APIGatewayProxyRequest apigProxyEvent, ILambdaContext context)
+        public async Task<APIGatewayProxyResponse> FunctionHandler(APIGatewayProxyRequest apigProxyEvent,
+            ILambdaContext context)
         {
-            var requestBody = JsonSerializer.Deserialize<Dictionary<string, string>>(apigProxyEvent.Body);
-            var username = requestBody["Username"];
-            var password = requestBody["Password"];
-            requestBody.TryGetValue("Email", out var email);
+            var requestBody = JsonSerializer.Deserialize<SignUpBodyRequest>(apigProxyEvent.Body);
 
-            var signInResponse = await _signInService.Authenticate(username, password);
+            var signInResponse = await _signInService.Authenticate(
+                requestBody.Username,
+                requestBody.Password);
 
             if (signInResponse.Success)
             {
                 return CreateResponse(signInResponse);
             }
-            
-            var signUpRequest = new SignUpRequest(username, password, email);
-                
+
+            var signUpRequest = new SignUpRequest(
+                requestBody.Username,
+                requestBody.Password,
+                requestBody.Email);
+
             await _singUpRepository.Register(signUpRequest);
-                
-            signInResponse = await _signInService.Authenticate(username, password);
+
+            signInResponse = await _signInService.Authenticate(
+                requestBody.Username, 
+                requestBody.Password);
 
             return CreateResponse(signInResponse);
         }
