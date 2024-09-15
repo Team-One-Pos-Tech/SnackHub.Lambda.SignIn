@@ -13,29 +13,32 @@ public class CognitoSignUpRepository : ISignUpRepository
     public async Task<SingUpResponse> Register(SignUpRequest request)
     {
         var client = new AmazonCognitoIdentityProviderClient();
+        
+        var userPoolId = Environment.GetEnvironmentVariable("USER_POOL_ID");
+        
         var response = await client.AdminCreateUserAsync(new AdminCreateUserRequest 
         {
             MessageAction = "SUPPRESS",
-            TemporaryPassword = request.password,
+            TemporaryPassword = request.Password,
             UserAttributes = new List<AttributeType> {
                 new AttributeType {
                     Name = "email",
-                    Value = request.email
+                    Value = request.Email
                 },
                 new AttributeType {
                     Name = "custom:CPF",
-                    Value = request.username
+                    Value = request.Username
                 }
             },
-            UserPoolId = "us-east-1_DBk6tjf8T",
-            Username = request.username
+            UserPoolId = userPoolId,
+            Username = request.Username
         });
 
         await client.AdminSetUserPasswordAsync(new AdminSetUserPasswordRequest()
         {
-            UserPoolId = "us-east-1_DBk6tjf8T",
-            Username = request.username,
-            Password = request.password,
+            UserPoolId = userPoolId,
+            Username = request.Username,
+            Password = request.Password,
             Permanent = true
         });
             
