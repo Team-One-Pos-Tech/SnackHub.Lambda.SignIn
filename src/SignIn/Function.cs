@@ -23,7 +23,7 @@ namespace SignIn
             _signInService = new CognitoSignInService();
         }
 
-        public Function(ISignInService signInService, ISignUpRepository singUpRepository)
+        public Function(ISignInService signInService)
         {
             _signInService = signInService;
         }

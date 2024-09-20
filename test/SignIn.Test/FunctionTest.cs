@@ -12,12 +12,10 @@ namespace SignIn.Tests
   public class FunctionTest
   {
     private Mock<ISignInService> _authRepository;
-    private Mock<ISignUpRepository> _registerRepository;
 
     private void BeforeTestStarting()
     {
       _authRepository = new Mock<ISignInService>();
-      _registerRepository = new Mock<ISignUpRepository>();
     }
     
     [Fact]
@@ -43,7 +41,7 @@ namespace SignIn.Tests
           new SingInResponse("eyJraWQiOiJrZXktdjEiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiI0ZzlpOXFpZ2NtN21xODJzMnI3djkzOWF1ZSIsImF1ZCI6IkRiNmtyZm9lZG5k", true)
         );
             
-      var function = new Function(_authRepository.Object, _registerRepository.Object);
+      var function = new Function(_authRepository.Object);
       
       // Act
       var response = await function.FunctionHandler(request, context);
