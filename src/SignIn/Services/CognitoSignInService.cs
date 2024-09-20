@@ -5,7 +5,7 @@ using Amazon.CognitoIdentityProvider;
 using Amazon.CognitoIdentityProvider.Model;
 using SignIn.Contracts;
 
-namespace SignIn.Repositories;
+namespace SignIn.Services;
 
 public class CognitoSignInService : ISignInService
 {
