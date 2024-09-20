@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
-    <RootNamespace>HelloWorld.Tests</RootNamespace>
+    <RootNamespace>SignIn.Tests</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
