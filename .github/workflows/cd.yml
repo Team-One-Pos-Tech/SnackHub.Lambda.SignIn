@@ -28,5 +28,14 @@ jobs:
     - name: Build Function
       run: sam build
 
-    - name: Deploy Function
-      run: sam deploy --no-confirm-changeset --no-fail-on-empty-changeset
+    - name: Build Image
+      run: docker build -t ghcr.io/team-one-pos-tech/signin-lambda -f ./Dockerfile --target final .
+    
+    - name: Push Image
+      run: docker push ghcr.io/team-one-pos-tech/signin-lambda
+
+    # - name: Build Function
+    #   run: sam build
+
+    # - name: Deploy Function
+    #   run: sam deploy --no-confirm-changeset --no-fail-on-empty-changeset
