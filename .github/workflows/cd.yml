@@ -29,7 +29,6 @@ jobs:
   #     run: sam build
 
     create-and-publish-image:
-      needs: build-and-test
       permissions: write-all
       runs-on: ubuntu-latest
       steps:     
