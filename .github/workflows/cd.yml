@@ -29,7 +29,7 @@ jobs:
       run: sam build
 
     - name: Build Image
-      run: docker build -t ghcr.io/team-one-pos-tech/signin-lambda -f ./Dockerfile --target final .
+      run: docker build -t ghcr.io/team-one-pos-tech/signin-lambda .
     
     - name: Push Image
       run: docker push ghcr.io/team-one-pos-tech/signin-lambda
