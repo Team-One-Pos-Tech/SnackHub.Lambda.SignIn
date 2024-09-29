@@ -41,7 +41,7 @@ jobs:
           password: '${{secrets.GITHUB_TOKEN}}'
 
       - name: Build Image
-        run: docker build -t ghcr.io/team-one-pos-tech/snack-hub.lambda.auth .
+        run: docker build -t ghcr.io/team-one-pos-tech/snack-hub.lambda.auth ./src/SignIn/
       
       - name: Push Image
         run: docker push ghcr.io/team-one-pos-tech/snack-hub.lambda.auth
