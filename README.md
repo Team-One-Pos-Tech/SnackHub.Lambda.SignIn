@@ -1,3 +1,6 @@
+# How does authentication work?
+[Authentication Documentation](https://github.com/Team-One-Pos-Tech/SnackHub/wiki/Authentication)
+
 # SignInFunction
 
 This project contains source code and supporting files for a serverless application that you can deploy with the SAM CLI. It includes the following files and folders.
