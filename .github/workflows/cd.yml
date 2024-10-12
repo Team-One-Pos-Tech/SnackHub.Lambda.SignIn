@@ -10,7 +10,7 @@ env:
 jobs:
 
   sign-in-terraform:
-    name: 'Sign In Registry ECR Terraform'
+    name: 'ECR Terraform'
     runs-on: ubuntu-latest
     environment: production
 
@@ -45,6 +45,7 @@ jobs:
       run: cd ./infra/; terraform apply -auto-approve -input=false
   
   create-and-publish-image:
+    name: "Build and Publish Image"
     permissions: write-all
     needs: sign-in-terraform
     runs-on: ubuntu-latest
