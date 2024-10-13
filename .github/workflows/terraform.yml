@@ -6,7 +6,7 @@ on:
 jobs:
 
   sign-in-terraform:
-    name: 'Creating ECR'
+    name: 'ECR Terraform'
     runs-on: ubuntu-latest
     environment: production
 
@@ -25,3 +25,18 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
         aws-region: us-east-1
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v1
+      with:
+        cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+
+    - name: Terraform Init
+      run: cd ./infra/; terraform init
+
+    - name: Terraform Plan
+      run: cd ./infra/; terraform plan -input=false
+
+    - name: Terraform Apply
+      run: cd ./infra/; terraform apply -auto-approve -input=false
+  
