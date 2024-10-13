@@ -8,11 +8,9 @@ env:
   ECR_REPOSITORY: sign-in-registry
 
 jobs:
-
   create-and-publish-image:
     name: "Build and Publish Image"
     permissions: write-all
-    needs: sign-in-terraform
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
